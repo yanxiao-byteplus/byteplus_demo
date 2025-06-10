@@ -100,9 +100,6 @@ class HSBCDemo:
 
         ret = False
         if template_id:
-            body = {
-                "TemplateId": template_id
-            }
 
             data = self._svc.lock_template({
                 "TemplateId": template_id,
@@ -167,8 +164,8 @@ if __name__ == '__main__':
         # demo.describe_delivery_policy(template_id = template_id)
         demo.create_domain_from_delivery_policy(template_id = template_id, domain = demo_domain)
         demo.list_cdn_domains(domain = demo_domain)
-        # demo.delete_cdn_domain(domain = demo_domain)
-        # demo.delete_delivery_policy(template_id = template_id)
+        demo.delete_cdn_domain(domain = demo_domain)
+        demo.delete_delivery_policy(template_id = template_id)
 
 
 
