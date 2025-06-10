@@ -142,13 +142,14 @@ class HSBCDemo:
     
     def list_cdn_domains(self, domain: str) -> None:
         
-        body = {
-             "Domain": domain,
-        }
-        
-        data = self._svc.list_cdn_domains(body)
-        formatted_data = json.dumps(data, indent=4, sort_keys=True)
-        print(formatted_data)
+        if domain:
+            body = {
+                "Domain": domain,
+            }
+            
+            data = self._svc.list_cdn_domains(body)
+            formatted_data = json.dumps(data, indent=4, sort_keys=True)
+            print(formatted_data)
 
 
 if __name__ == '__main__':
