@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import time
+from typing import Optional
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../../../")
 from byteplus_sdk.cdn.service import CDNService
@@ -15,7 +16,7 @@ class HSBCDemo:
         self._svc.set_sk(sk)
 
 
-    def create_delivery_policy(self, policy_name: str) -> str:
+    def create_delivery_policy(self, policy_name: str) -> Optional[str]:
                 
         body = {
             "Title": policy_name,
@@ -49,6 +50,7 @@ class HSBCDemo:
             if template_id:
                 print(resp)
                 return template_id
+            
         except KeyError:
             print(resp)
 
@@ -77,9 +79,8 @@ class HSBCDemo:
             except (KeyError):
                 print(data)
 
-    def delete_delivery_policy(self, template_id: str) -> bool:
+    def delete_delivery_policy(self, template_id: str) -> None:
 
-        ret = False
         if template_id:
             body = {
                 "TemplateId": template_id
@@ -90,15 +91,13 @@ class HSBCDemo:
                 request_id = data["ResponseMetadata"]["RequestId"]
                 if request_id:
                     print(data)
-                    ret = True
+
             except KeyError:
                 print(data)
         
-        return ret
 
-    def publish_delivery_policy(self, template_id: str) -> bool:
+    def publish_delivery_policy(self, template_id: str) -> None:
 
-        ret = False
         if template_id:
 
             data = self._svc.lock_template({
@@ -106,9 +105,8 @@ class HSBCDemo:
             })
                 
             print(data)
-        return ret
     
-    def create_domain_from_delivery_policy(self, template_id: str, domain: str) -> str:
+    def create_domain_from_delivery_policy(self, template_id: str, domain: str) -> None:
         
         if template_id and domain:
             body = {
