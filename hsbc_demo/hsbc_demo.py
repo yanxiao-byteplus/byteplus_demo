@@ -40,7 +40,28 @@ class HSBCDemo:
                         ]
                     }
                 }
-            ]
+            ],
+            "Cache": [
+            {
+                "CacheAction": {
+                    "Action": "cache",
+                    "DefaultPolicy": "default",
+                    "Ttl": 864000
+                },
+                "Condition": {
+                    "ConditionRule": [
+                        {
+                            "Name": "",
+                            "Object": "directory",
+                            "Operator": "match",
+                            "Type": "url",
+                            "Value": "/"
+                        }
+                    ],
+                    "Connective": "OR"
+                }
+            }
+        ],
         }
 
         resp = self._svc.create_service_template(body)
@@ -76,6 +97,10 @@ class HSBCDemo:
                 print(f"""
                     {template_id=}  {title=} -> {domains=}
                 """)
+                
+                formatted_data = json.dumps(data, indent=4, sort_keys=True)
+                print(formatted_data)
+
             except (KeyError):
                 print(data)
 
@@ -114,7 +139,6 @@ class HSBCDemo:
                 "Project": "default",
                 "ServiceTemplateId": template_id,
                 "CertId": "cert-101be04b745e4233ba7cc0e013bff6d9",
-                # "CipherTemplateId": "tpl-example",
                 "Domain": domain,
                 "HTTPSSwitch": "on"
             }
@@ -154,17 +178,20 @@ class HSBCDemo:
 
 if __name__ == '__main__':
     
-    demo_domain = "hsbc-demo101.migrate.lcyice.top"
-    demo = HSBCDemo()
+    demo_domain = "hsbc-demo-101.migrate.lcyice.top"
     
+    demo = HSBCDemo()
     template_id = demo.create_delivery_policy(policy_name = "hsbc-sdk-api-demo")
     if template_id:
         demo.publish_delivery_policy(template_id = template_id)
         # demo.describe_delivery_policy(template_id = template_id)
         demo.create_domain_from_delivery_policy(template_id = template_id, domain = demo_domain)
-        demo.list_cdn_domains(domain = demo_domain)
-        demo.delete_cdn_domain(domain = demo_domain)
-        demo.delete_delivery_policy(template_id = template_id)
+        
+        time.sleep(5)
+        
+        # demo.list_cdn_domains(domain = demo_domain)
+        # demo.delete_cdn_domain(domain = demo_domain)
+        # demo.delete_delivery_policy(template_id = template_id)
 
 
 
