@@ -1,197 +1,245 @@
-import os
-import sys
-import json
-import time
-from typing import Optional
+#  -*- coding: utf-8 -*-
+import os,sys
 
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../../../")
+sys.path.insert(0, "/Users/bytedance/byteplus/byteplus-sdk-python/")
 from byteplus_sdk.cdn.service import CDNService
+
+from rule_engine.Rule import Condition, Action, Rule
+from rule_engine.Const import Const
 
 class HSBCDemo:
     def __init__(self):
         self._svc = CDNService()
-        ak = os.environ.get('BYTEPLUS_ACCESSKEY', '')
-        sk = os.environ.get('BYTEPLUS_SECRETKEY', '')
+        ak = os.environ.get('HSBC_DEMO_ACCESSKEY', '')
+        sk = os.environ.get('HSBC_DEMO_SECRETKEY', '')
         self._svc.set_ak(ak)
         self._svc.set_sk(sk)
 
 
-    def create_delivery_policy(self, policy_name: str) -> Optional[str]:
+    # def create_delivery_policy(self, policy_name: str) -> str:
                 
-        body = {
-            "Title": policy_name,
-            "Message": "SDK Demo",
-            "Project": "default",
-            "OriginProtocol": "http",
-            "Origin": [
-                {
-                    "OriginAction": {
-                        "OriginLines": [
-                            {
-                                "OriginType": "primary",
-                                "InstanceType": "domain",
-                                "Address": "img.migrate.lcyice.top",
-                                "Weight": "1",
-                                "HttpPort": "80",
-                                "HttpsPort": "443",
-                                "OriginHost": "img.migrate.lcyice.top",
+    #     body = {
+    #         "Title": policy_name,
+    #         "Message": "SDK Demo",
+    #         "Project": "default",
+    #         "OriginProtocol": "http",
+    #         "Origin": [
+    #             {
+    #                 "OriginAction": {
+    #                     "OriginLines": [
+    #                         {
+    #                             "OriginType": "primary",
+    #                             "InstanceType": "domain",
+    #                             "Address": "img.migrate.lcyice.top",
+    #                             "Weight": "1",
+    #                             "HttpPort": "80",
+    #                             "HttpsPort": "443",
+    #                             "OriginHost": "img.migrate.lcyice.top",
        
-                            }
-                        ]
-                    }
-                }
-            ],
-            "Cache": [
-            {
-                "CacheAction": {
-                    "Action": "cache",
-                    "DefaultPolicy": "default",
-                    "Ttl": 864000
+    #                         }
+    #                     ]
+    #                 }
+    #             }
+    #         ]
+    #     }
+
+    #     resp = self._svc.create_service_template(body)
+        
+    #     try:
+    #         template_id = resp['Result']['TemplateId']
+    #         if template_id:
+    #             print(f"""
+    #                 delivery policy created as a success {policy_name=} -> {template_id=}
+    #             """)
+    #             return template_id
+    #     except KeyError:
+    #         print(resp)
+        
+    
+    def list_cdn_domains(self) -> None:
+        body = {}
+        data = self._svc.list_cdn_domains(body)
+        for seq, domain in enumerate(data["Result"]["Data"], start = 1):
+            print(f"""
+                  {seq} domain: {domain['Domain']}  cname: {domain['Cname']}  waf: {domain['Waf']} 
+            """)
+    
+    # def describe_delivery_policy(self, template_id: str) -> None:
+        
+    #     if template_id:
+            
+    #         body = {
+    #             "TemplateId": template_id
+    #         }
+
+    #         data = self._svc.describe_service_template(body)
+    #         try:
+    #             policy = data["Result"]
+    #             template_id = policy['TemplateId']
+    #             title = policy['Title']
+                
+    #             domains = []
+    #             if policy['BoundDomains']:
+    #                 domains = [x['Domain'] for x in policy['BoundDomains']]
+                    
+    #             print(f"""
+    #                 {template_id=}  {title=} -> {domains=}
+    #             """)
+    #         except (KeyError):
+    #             print(data)
+
+    def create_cipher_policy(self, title: str) -> None:
+        
+        body = {
+            "Title": title,
+            "Message": "hsbc demo",
+            "Project": "default",
+            "Quic": {
+                "Switch": False
+            },
+            "HTTPS": {
+                "CertCheck": None,
+                "DisableHttp": False,
+                "ForcedRedirect": {
+                "EnableForcedRedirect": True,
+                "StatusCode": "301"
                 },
-                "Condition": {
-                    "ConditionRule": [
-                        {
-                            "Name": "",
-                            "Object": "directory",
-                            "Operator": "match",
-                            "Type": "url",
-                            "Value": "/"
-                        }
-                    ],
-                    "Connective": "OR"
-                }
-            }
-        ],
+                "HTTP2": True,
+                "Hsts": {
+                "Subdomain": None,
+                "Switch": False,
+                "Ttl": 0
+                },
+                "OCSP": False,
+                "TlsVersion": ["tlsv1.3"]
+            },
+            "HttpForcedRedirect": {
+                "EnableForcedRedirect": False,
+                "StatusCode": "301"
+            },
+        }
+        
+        data = self._svc.create_cipher_template(body)
+        try:
+            policy = data["Result"]
+            template_id = policy['TemplateId']
+              
+            print(f"""
+                {template_id=} created for cipher template
+            """)
+            
+            return template_id
+        
+        except (KeyError) as e:
+            print(f"{e=}")
+            print(data)
+
+
+    def describe_cipher_policy(self, template_id: str) -> None:
+        
+        body = {
+            "TemplateId": template_id
         }
 
-        resp = self._svc.create_service_template(body)
+        try:
+            resp = self._svc.describe_cipher_template(body)
+            print(f"""
+                    {template_id=}  {resp=}
+            """)        
+            
+        except Exception as e:
+            print(f"{e=}")
+    
+    def describe_rule_engine_policy(self, template_id: str) -> None:
+        
+        body = {
+            "TemplateId": template_id
+        }
+
+        try:
+            resp = self._svc.describe_rule_engine_template(body)
+            print(f"""
+                    {template_id=}  {resp=}
+            """)        
+            
+        except Exception as e:
+            print(f"{e=}")
+            
+    def update_cipher_template(self, template_id: str) -> None:
+        
+        body = {
+            "TemplateId": template_id,
+            "Title": "revised-tpl_hsbc_sdk_cipher"
+        }
         
         try:
-            template_id = resp['Result']['TemplateId']
-            if template_id:
-                print(resp)
-                return template_id
-            
-        except KeyError:
-            print(resp)
-
+            resp = self._svc.update_cipher_template(body)
+            print(f"""
+                    {template_id=}  {resp=}
+            """)        
+        except Exception as e:
+            print(f"{e=}")
     
-    def describe_delivery_policy(self, template_id: str) -> None:
-        
-        if template_id:
-            
-            body = {
-                "TemplateId": template_id
-            }
-
-            data = self._svc.describe_service_template(body)
-            try:
-                policy = data["Result"]
-                template_id = policy['TemplateId']
-                title = policy['Title']
-                
-                domains = []
-                if policy['BoundDomains']:
-                    domains = [x['Domain'] for x in policy['BoundDomains']]
-                    
-                print(f"""
-                    {template_id=}  {title=} -> {domains=}
-                """)
-                
-                formatted_data = json.dumps(data, indent=4, sort_keys=True)
-                print(formatted_data)
-
-            except (KeyError):
-                print(data)
-
-    def delete_delivery_policy(self, template_id: str) -> None:
-
-        if template_id:
-            body = {
-                "TemplateId": template_id
-            }
-
-            data = self._svc.delete_template(body)
-            try:
-                request_id = data["ResponseMetadata"]["RequestId"]
-                if request_id:
-                    print(data)
-
-            except KeyError:
-                print(data)
-        
-
-    def publish_delivery_policy(self, template_id: str) -> None:
-
-        if template_id:
-
-            data = self._svc.lock_template({
-                "TemplateId": template_id,
-            })
-                
-            print(data)
     
-    def create_domain_from_delivery_policy(self, template_id: str, domain: str) -> None:
+    def release_policy(self, template_id: str) -> None:
         
-        if template_id and domain:
-            body = {
-                "ServiceRegion": "outside_chinese_mainland",
-                "Project": "default",
-                "ServiceTemplateId": template_id,
-                "CertId": "cert-101be04b745e4233ba7cc0e013bff6d9",
-                "Domain": domain,
-                "HTTPSSwitch": "on"
-            }
+        body = {
+            "TemplateId": template_id        }
 
-            resp = self._svc.add_template_domain(body)
-            print(resp)
+        try:
+            resp = self._svc.release_template(body)
+            print(f"""
+                    {template_id=}  {resp=}
+            """)        
+            
+        except Exception as e:
+            print(f"{e=}")
+            
+            
+        body = {
+        "TemplateId": "tpl-example"
+    }
+
+
+    def delete_policy(self, template_id: str) -> None:
+        
+        body = {
+            "TemplateId": template_id
+        }
+
+        try:
+            resp = self._svc.delete_template(body)
+            print(f"""
+                    {template_id=}  {resp=}
+            """)        
+            
+        except Exception as e:
+            print(f"{e=}")
+            
     
-    def delete_cdn_domain(self, domain: str) -> None:
-        
-        if domain:
-            body = {
-                "Domain": domain,
-            }
-
-            resp = self._svc.stop_cdn_domain(body)
-            print(resp)
-            
-            time.sleep(5)
-            
-            resp = self._svc.delete_cdn_domain(body)
-            print(resp)
-            
-            time.sleep(5)
-
-    
-    def list_cdn_domains(self, domain: str) -> None:
-        
-        if domain:
-            body = {
-                "Domain": domain,
-            }
-            
-            data = self._svc.list_cdn_domains(body)
-            formatted_data = json.dumps(data, indent=4, sort_keys=True)
-            print(formatted_data)
-
+# tpl-ce9g3ro
 
 if __name__ == '__main__':
     
-    demo_domain = "hsbc-demo-101.migrate.lcyice.top"
-    
     demo = HSBCDemo()
-    template_id = demo.create_delivery_policy(policy_name = "hsbc-sdk-api-demo")
-    if template_id:
-        demo.publish_delivery_policy(template_id = template_id)
-        # demo.describe_delivery_policy(template_id = template_id)
-        demo.create_domain_from_delivery_policy(template_id = template_id, domain = demo_domain)
-        
-        time.sleep(5)
-        
-        # demo.list_cdn_domains(domain = demo_domain)
-        # demo.delete_cdn_domain(domain = demo_domain)
-        # demo.delete_delivery_policy(template_id = template_id)
+    # demo.list_cdn_domains()
+    # template_id = demo.create_delivery_policy(policy_name = "hsbc-sdk-api-demo")
+    # if template_id:
+    #     demo.describe_delivery_policy(template_id =  template_id)
+    
+    # template_ciphers = 'tpl-ceqmklq'
+    # if template_ciphers:
+    #     demo.describe_cipher_policy(template_id =  template_ciphers)、
+
+    title_tpl_cipher = 'tpl_hsbc_sdk_cipher'
+    # id_tpl_cipher = demo.create_cipher_policy(title =  title_tpl_cipher)
+    
+    # if id_tpl_cipher:
+    #     demo.release_policy(template_id = id_tpl_cipher)
+    #     demo.update_cipher_template(template_id = id_tpl_cipher)
+    #     demo.describe_cipher_policy(template_id = id_tpl_cipher)
+    #     demo.delete_policy(template_id = id_tpl_cipher)
+
 
 
 
