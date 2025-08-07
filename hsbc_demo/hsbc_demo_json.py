@@ -10,7 +10,7 @@ multi-line string for direct consumption or further serialization.
 json_delivery_policy = """
 {
   "AreaAccessRule": {
-    "Area": ["HKG", "MYS", "THA", "IDN", "USA", "RUS"],
+    "Area": ["HKG", "MYS", "THA", "IDN", "USA", "RUS", "SGP"],
     "RuleType": "allow",
     "Switch": true
   },
