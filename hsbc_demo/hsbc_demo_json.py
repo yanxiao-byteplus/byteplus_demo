@@ -1,10 +1,19 @@
+# -*- coding: utf-8 -*-
+"""
+HSBC Demo Delivery Policy JSON Template
+
+This file defines the JSON configuration for delivery policy in a clear,
+efficient and professional format. The configuration is stored as a Python
+multi-line string for direct consumption or further serialization.
+"""
+
 json_delivery_policy = """
+{
   "AreaAccessRule": {
     "Area": ["HKG", "MYS", "THA", "IDN", "USA", "RUS"],
     "RuleType": "allow",
     "Switch": true
   },
-
   "BrowserCache": [],
   "Cache": [
     {
@@ -17,11 +26,10 @@ json_delivery_policy = """
       "Condition": {
         "ConditionRule": [
           {
-            "Name": "",
             "Object": "filetype",
             "Operator": "match",
             "Type": "url",
-            "Value": "html;htm;7z;avi;avif;apk;bin;bmp;bz2;class;css;csv;doc;docx;dmg;ejs;eot;eps;exe;flac;gif;gz;ico;iso;jar;jpg;jpeg;js;mid;midi;mkv;mp3;mp4;ogg;otf;pdf;pict;pls;png;ppt;pptx;ps;rar;svg;svgz;swf;tar;tif;tiff;ttf;webm;webp;woff;woff2;xls;xlsx;zip;zst"
+            "Value": "html;htm;7z;avi;avif;apk;bin;bmp;bz2;class;css;csv;doc;docx;dmg;ejs;eot;eps;exe;flac;gif;gz;ico;iso;jar;jpg;jpeg;js;mid;midi;mkv;mp3;mp4;ogg;otf;pdf;pict;pls;png;ppt;pptx;ps;rar;sh;shtml;svg;swf;tar;tga;tif;tiff;ttf;txt;wav;webp;woff;woff2;xls;xlsx;xml;zip"
           }
         ],
         "Connective": "OR"
@@ -37,7 +45,6 @@ json_delivery_policy = """
       "Condition": {
         "ConditionRule": [
           {
-            "Name": "",
             "Object": "path",
             "Operator": "match",
             "Type": "url",
@@ -63,7 +70,6 @@ json_delivery_policy = """
       "Condition": {
         "ConditionRule": [
           {
-            "Name": "",
             "Object": "directory",
             "Operator": "match",
             "Type": "url",
@@ -87,7 +93,6 @@ json_delivery_policy = """
         "Condition": {
           "ConditionRule": [
             {
-              "Name": "",
               "Object": "directory",
               "Operator": "match",
               "Type": "url",
@@ -155,7 +160,6 @@ json_delivery_policy = """
   "IPv6": {
     "Switch": true
   },
-  "Message": "",
   "MethodDeniedRule": {
     "Methods": "POST,DELETE,PUT,PATCH,CONNECT,OPTIONS",
     "Switch": true
@@ -184,18 +188,13 @@ json_delivery_policy = """
     }
   ],
   "OriginAccessRule": {
-    "AllowEmpty": true,
-    "IgnoreCase": null,
-    "Origins": null,
-    "RuleType": null,
-    "Switch": null
+    "AllowEmpty": true
   },
   "OriginArg": [
     {
       "Condition": {
         "ConditionRule": [
           {
-            "Name": "",
             "Object": "directory",
             "Operator": "match",
             "Type": "url",
@@ -216,17 +215,14 @@ json_delivery_policy = """
     }
   ],
   "OriginCertCheck": {
-    "CertInfoList": null,
     "Switch": false
   },
   "OriginHost": "",
   "OriginIPv6": "followclient",
   "OriginProtocol": "http",
   "OriginRange": false,
-  "OriginRetry": null,
   "Project": "default",
   "RemoteAuth": {
-    "RemoteAuthRules": null,
     "Switch": false
   },
   "RequestHeader": [
@@ -267,7 +263,6 @@ json_delivery_policy = """
     }
   ],
   "SignedUrlAuth": {
-    "AuthRulesF": null,
     "SignedUrlAuthRules": [
       {
         "Condition": {
@@ -276,19 +271,15 @@ json_delivery_policy = """
         },
         "SignedUrlAuthAction": null
       }
-    ],
-    "Switch": null
+    ]
   },
   "Type": "service",
   "UaAccessRule": {
-    "AllowEmpty": true,
-    "IgnoreCase": null,
-    "RuleType": null,
-    "Switch": null,
-    "UserAgent": null
+    "AllowEmpty": true
   },
   "UrlNormalize": {
     "NormalizeObject": ["back_slashes", "successive_slashes", "dot_segments"],
     "Switch": true
   }
+}
 """
