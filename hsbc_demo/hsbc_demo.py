@@ -466,8 +466,8 @@ if __name__ == '__main__':
         logger.info(f"..............................................................")  
         byteplus_cdn_sdk.list_cdn_domains()
 
-        logger.info(f"..............................................................")
         # Create and manage cipher policy
+        logger.info(f"..............................................................")
         title_tpl_cipher = 'tpl_hsbc_sdk_cipher'
         logger.info(f"Starting creation of cipher policy: {title_tpl_cipher}")
         id_tpl_cipher = byteplus_cdn_sdk.create_cipher_policy(title=title_tpl_cipher)
@@ -477,9 +477,8 @@ if __name__ == '__main__':
             byteplus_cdn_sdk.describe_cipher_policy(template_id=id_tpl_cipher)
             # byteplus_cdn_sdk.delete_policy(template_id=id_tpl_cipher)  # Uncomment to test deletion
 
-        logger.info(f"..............................................................")
-
         # Create and manage rule engine policy
+        logger.info(f"..............................................................")
         title_tpl_rule_engine = 'tpl_hsbc_sdk_rule_engine'
         logger.info(f"Starting creation of rule engine policy: {title_tpl_rule_engine}")
         id_tpl_rule_engine = byteplus_cdn_sdk.create_rule_engine(title=title_tpl_rule_engine)
@@ -488,8 +487,8 @@ if __name__ == '__main__':
             byteplus_cdn_sdk.describe_rule_engine_policy(template_id=id_tpl_rule_engine)
             # byteplus_cdn_sdk.delete_policy(template_id=id_tpl_rule_engine)  # Uncomment to test deletion
 
-        logger.info(f"..............................................................")  
         # Create and manage delivery policy
+        logger.info(f"..............................................................")  
         title_tpl_delivery_policy = 'tpl_hsbc_sdk_delivery_policy'    
         logger.info(f"Starting creation of delivery policy: {title_tpl_delivery_policy}")
         id_tpl_delivery_policy = byteplus_cdn_sdk.create_delivery_policy(title=title_tpl_delivery_policy)
@@ -506,6 +505,7 @@ if __name__ == '__main__':
             id_delivery=id_tpl_delivery_policy,
             id_cipher=id_tpl_cipher
         )   
+        
         logger.info(f"..............................................................")
 
         
