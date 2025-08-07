@@ -458,7 +458,7 @@ class HSBCDemo:
 
 if __name__ == '__main__':
     try:
-        logger.info("Starting HSBC CDN Demo script")
+        logger.info("Starting HSBC CDN Demo..")
         # Initialize CDN demo client
         byteplus_cdn_sdk = HSBCDemo()
         
@@ -467,8 +467,8 @@ if __name__ == '__main__':
         byteplus_cdn_sdk.list_cdn_domains()
 
         # Create and manage cipher policy
-        logger.info(f"..............................................................")
         title_tpl_cipher = 'tpl_hsbc_sdk_cipher'
+        logger.info(f"..............................................................")   
         logger.info(f"Starting creation of cipher policy: {title_tpl_cipher}")
         id_tpl_cipher = byteplus_cdn_sdk.create_cipher_policy(title=title_tpl_cipher)
         if id_tpl_cipher:
@@ -478,8 +478,8 @@ if __name__ == '__main__':
             # byteplus_cdn_sdk.delete_policy(template_id=id_tpl_cipher)  # Uncomment to test deletion
 
         # Create and manage rule engine policy
-        logger.info(f"..............................................................")
         title_tpl_rule_engine = 'tpl_hsbc_sdk_rule_engine'
+        logger.info(f"..............................................................")   
         logger.info(f"Starting creation of rule engine policy: {title_tpl_rule_engine}")
         id_tpl_rule_engine = byteplus_cdn_sdk.create_rule_engine(title=title_tpl_rule_engine)
         if id_tpl_rule_engine:
@@ -488,8 +488,8 @@ if __name__ == '__main__':
             # byteplus_cdn_sdk.delete_policy(template_id=id_tpl_rule_engine)  # Uncomment to test deletion
 
         # Create and manage delivery policy
-        logger.info(f"..............................................................")  
-        title_tpl_delivery_policy = 'tpl_hsbc_sdk_delivery_policy'    
+        title_tpl_delivery_policy = 'tpl_hsbc_sdk_delivery_policy'   
+        logger.info(f"..............................................................")   
         logger.info(f"Starting creation of delivery policy: {title_tpl_delivery_policy}")
         id_tpl_delivery_policy = byteplus_cdn_sdk.create_delivery_policy(title=title_tpl_delivery_policy)
         if id_tpl_delivery_policy:
@@ -497,8 +497,9 @@ if __name__ == '__main__':
             byteplus_cdn_sdk.describe_delivery_policy(template_id=id_tpl_delivery_policy)
             # byteplus_cdn_sdk.delete_policy(template_id=id_tpl_delivery_policy)  # Uncomment to test deletion
 
-        logger.info(f"..............................................................")  
         domain = "hsbc-demo-sdk.security.lcyice.top"
+        logger.info(f"..............................................................")  
+        logger.info(f"Starting creation new domain: {domain}")
         byteplus_cdn_sdk.create_domain(
             domain=domain,
             id_rule=id_tpl_rule_engine,
